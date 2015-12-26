@@ -1,0 +1,6 @@
+# DAV-Backup
+HOST="https://cloud.example.de"
+OCUSER="user"
+ADDRESSBOOK="contacts" # small letters (for owncloud)
+CALENDAR="personal" # small letters (for owncloud)
+DATE=$(date +"%Y_%m_%d_%H_%M_%S") # date-format of file
