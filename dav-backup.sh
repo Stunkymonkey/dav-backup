@@ -6,10 +6,10 @@ source ./config
 echo -n "Enter host password for user '$OCUSER':"
 read -s PASSWORD
 
-wget --user=$OCUSER --password=$PASSWORD --no-check-certificate --no-clobber -O $ADDRESSBOOK-$DATE.vcf \
+wget --user="$OCUSER" --password="$PASSWORD" --no-check-certificate --no-clobber -O $ADDRESSBOOK-$DATE.vcf \
 	$HOST/remote.php/carddav/addressbooks/$OCUSER/$ADDRESSBOOK?export
 
-wget --user=$OCUSER --password=$PASSWORD --no-check-certificate --no-clobber -O $CALENDAR-$DATE.ics \
+wget --user="$OCUSER" --password="$PASSWORD" --no-check-certificate --no-clobber -O $CALENDAR-$DATE.ics \
 	$HOST/remote.php/caldav/calendars/$OCUSER/$CALENDAR?export
 
 if [ -s $CALENDAR-$DATE.ics -a -s $ADDRESSBOOK-$DATE.vcf ]
