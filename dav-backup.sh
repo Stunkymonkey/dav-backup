@@ -3,8 +3,10 @@
 # getting config
 source ./config
 
-echo -n "Enter host password for user '$OCUSER':"
-read -s PASSWORD
+if [[ "$PASSWORD" -eq "" ]]; then
+	echo -n "Enter host password for user '$OCUSER':"
+	read -s PASSWORD
+fi
 
 wget --user="$OCUSER" --password="$PASSWORD" --no-check-certificate --no-clobber -O $ADDRESSBOOK-$DATE.vcf \
 	$HOST/remote.php/carddav/addressbooks/$OCUSER/$ADDRESSBOOK?export

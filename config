@@ -1,6 +1,7 @@
 # DAV-Backup
 HOST="https://cloud.example.de"
 OCUSER="user"
+PASSWORD="123456" # leave it empty, then you will be promted every time you use the script
 ADDRESSBOOK="contacts" # small letters (for owncloud)
 CALENDAR="personal" # small letters (for owncloud)
 DATE=$(date +"%Y_%m_%d_%H_%M_%S") # date-format of file
