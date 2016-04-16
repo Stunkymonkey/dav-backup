@@ -1,27 +1,48 @@
 #!/bin/bash
 
+if [[ ! -w ./ ]]; then
+	echo "Error: unable to write in directory"
+	exit 1
+fi
+
 # getting config
 source ./config
 
-if [[ "$PASSWORD" -eq "" ]]; then
+echo "$PASSWORD"
+
+tar cfT OC-$DATE.tar.gz /dev/null
+
+if [[ -z "$PASSWORD" ]]; then
 	echo -n "Enter host password for user '$OCUSER':"
 	read -s PASSWORD
 fi
 
-wget --user="$OCUSER" --password="$PASSWORD" --no-check-certificate --no-clobber -O $ADDRESSBOOK-$DATE.vcf \
-	$HOST/remote.php/carddav/addressbooks/$OCUSER/$ADDRESSBOOK?export
+for i in $ADDRESSBOOK; do
+	wget --user="$OCUSER" --password="$PASSWORD" --no-check-certificate --recursive -nv -O $i-$DATE.vcf $HOST/remote.php/carddav/addressbooks/$OCUSER/$i?export
+	
+	if [ -s $i-$DATE.vcf ]; then
+		echo "$i successfully downloaded"
+	else
+		echo "unknwon error"
+		exit $?
+	fi
 
-wget --user="$OCUSER" --password="$PASSWORD" --no-check-certificate --no-clobber -O $CALENDAR-$DATE.ics \
-	$HOST/remote.php/caldav/calendars/$OCUSER/$CALENDAR?export
+	tar rvf OC-$DATE.tar.gz $i-$DATE.vcf
+	rm $i-$DATE.vcf
+done
 
-if [ -s $CALENDAR-$DATE.ics -a -s $ADDRESSBOOK-$DATE.vcf ]
-then
-	tar cfvz OC-$DATE.tar.gz ./$ADDRESSBOOK-$DATE.vcf ./$CALENDAR-$DATE.ics
-else
-	echo "wrong password"
-fi
+for j in $CALENDAR; do
+	wget --user="$OCUSER" --password="$PASSWORD" --no-check-certificate --recursive -nv -O $j-$DATE.ics $HOST/remote.php/caldav/calendars/$OCUSER/$j?export
+	
+	if [ -s $j-$DATE.ics ]; then
+		echo "$j successfully downloaded"
+	else
+		echo "unknwon error"
+		exit $?
+	fi
 
-rm $CALENDAR-$DATE.ics
-rm $ADDRESSBOOK-$DATE.vcf
+	tar rvf OC-$DATE.tar.gz $j-$DATE.ics
+	rm $j-$DATE.ics
+done
 
 unset PASSWORD
