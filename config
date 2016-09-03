@@ -1,7 +1,7 @@
 #dav-backup
 
 # the URL to your server
-HOST="https://cloud.example.de"
+HOST="https://cloud.example.com"
 
 # enter the service that is providing the dav-service (eg. "owncloud"/"baikal")
 SERVICE="baikal"

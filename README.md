@@ -5,20 +5,26 @@ you can configure your data in a config file for automation:
 ```
 #dav-backup
 
-HOST="https://cloud.example.de"
+# the URL to your server
+HOST="https://cloud.example.com"
 
-OCUSER="user"
+# enter the service that is providing the dav-service (eg. "owncloud"/"baikal")
+SERVICE="baikal"
+
+# enter your login-username
+DAVUSER="user"
 
 # leave it empty, then you will be promted every time you use the script
 PASSWORD="123456"
 
-# small letters (for owncloud)
+# small letters (for owncloud/baikal)
 ADDRESSBOOK="contacts"
 
-# small letters (for owncloud)
+# small letters (for owncloud/baikal)
 CALENDAR="personal
-holidays"
+holiday"
 
 # date-format of output-file
 DATE=$(date +"%Y_%m_%d_%H_%M_%S")
+
 ```
