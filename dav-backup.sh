@@ -8,22 +8,36 @@ fi
 # getting config
 source ./config
 
-echo "$PASSWORD"
-
 tar cfT OC-$DATE.tar.gz /dev/null
 
+case "$SERVICE" in
+	"owncloud" )
+		CARDURL="remote.php/carddav/addressbooks"
+		CALURL="remote.php/caldav/calendars"
+		;;
+	"baikal" )
+		CARDURL="dav.php/addressbooks"
+		CALURL="dav.php/calendars"
+		;;
+	*)
+		echo "Unknown Service"
+		exit 1
+esac
+
 if [[ -z "$PASSWORD" ]]; then
-	echo -n "Enter host password for user '$OCUSER':"
+	echo -n "Enter host password for user '$DAVUSER':"
 	read -s PASSWORD
 fi
 
+
 for i in $ADDRESSBOOK; do
-	wget --user="$OCUSER" --password="$PASSWORD" --no-check-certificate --recursive -nv -O $i-$DATE.vcf $HOST/remote.php/carddav/addressbooks/$OCUSER/$i?export
+	wget --user="$DAVUSER" --password="$PASSWORD" --no-check-certificate --recursive -q -O $i-$DATE.vcf $HOST/$CARDURL/$DAVUSER/$i?export
 	
 	if [ -s $i-$DATE.vcf ]; then
 		echo "$i successfully downloaded"
 	else
 		echo "unknwon error"
+		rm $i-$DATE.vcf
 		exit $?
 	fi
 
@@ -32,12 +46,13 @@ for i in $ADDRESSBOOK; do
 done
 
 for j in $CALENDAR; do
-	wget --user="$OCUSER" --password="$PASSWORD" --no-check-certificate --recursive -nv -O $j-$DATE.ics $HOST/remote.php/caldav/calendars/$OCUSER/$j?export
+	wget --user="$DAVUSER" --password="$PASSWORD" --no-check-certificate --recursive -q -O $j-$DATE.ics $HOST/$CALURL/$DAVUSER/$j?export
 	
 	if [ -s $j-$DATE.ics ]; then
 		echo "$j successfully downloaded"
 	else
 		echo "unknwon error"
+		rm $j-$DATE.ics
 		exit $?
 	fi
 
