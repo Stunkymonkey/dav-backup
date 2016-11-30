@@ -8,7 +8,7 @@ fi
 # getting config
 source ./config
 
-tar cfT OC-$DATE.tar.gz /dev/null
+tar cfT DAV-$DATE.tar.gz /dev/null
 
 case "$SERVICE" in
 	"owncloud" )
@@ -41,7 +41,7 @@ for i in $ADDRESSBOOK; do
 		exit $?
 	fi
 
-	tar rvf OC-$DATE.tar.gz $i-$DATE.vcf
+	tar rvf DAV-$DATE.tar.gz $i-$DATE.vcf
 	rm $i-$DATE.vcf
 done
 
@@ -56,7 +56,7 @@ for j in $CALENDAR; do
 		exit $?
 	fi
 
-	tar rvf OC-$DATE.tar.gz $j-$DATE.ics
+	tar rvf DAV-$DATE.tar.gz $j-$DATE.ics
 	rm $j-$DATE.ics
 done
 
