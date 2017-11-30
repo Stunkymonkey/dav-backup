@@ -34,6 +34,7 @@ CALENDARS=("personal" "holiday")
 DATE=$(date +"%Y-%m-%d_%H-%M-%S")
 ```
 
+For `ADDRESSBOOKS` and `CALENDARS`, also values of the format `<id>:<name>` are allowed, while `<id>` is the identifier of your server and `<name>` is used in the filename.
 
 ## credentials
 

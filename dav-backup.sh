@@ -27,35 +27,43 @@ case "$SERVICE" in
 esac
 
 for addr in "${ADDRESSBOOKS[@]}"; do
+
+	IFS=: read id name <<< "${addr}"
+	[ -n "${name}" ] || name="${id}"
+
 	wget -q \
-		-O "$OUT/${addr}-$DATE.vcf" \
-		"$(printf "${CARDURL}" "${addr}")"
+		-O "$OUT/${name}-$DATE.vcf" \
+		"$(printf "${CARDURL}" "${id}")"
 	
-	if [ -s "$OUT/$addr-$DATE.vcf" ]; then
-		echo "$addr successfully downloaded"
+	if [ -s "$OUT/$name-$DATE.vcf" ]; then
+		echo "$name successfully downloaded"
 	else
 		echo "unknwon error"
-		rm "$OUT/$addr-$DATE.vcf"
+		rm "$OUT/$name-$DATE.vcf"
 		exit $?
 	fi
 
-	tar r -C "$OUT" -f "$OUT/DAV-$DATE.tar.gz" "$addr-$DATE.vcf"
-	rm "$OUT/$addr-$DATE.vcf"
+	tar r -C "$OUT" -f "$OUT/DAV-$DATE.tar.gz" "$name-$DATE.vcf"
+	rm "$OUT/$name-$DATE.vcf"
 done
 
 for cal in "${CALENDARS[@]}"; do
+
+	IFS=: read id name <<< "${cal}"
+	[ -n "${name}" ] || name="${id}"
+
 	wget -q \
-		-O "$OUT/$cal-$DATE.ics" \
-		"$(printf "${CALURL}" "${cal}")"
+		-O "$OUT/$name-$DATE.ics" \
+		"$(printf "${CALURL}" "${id}")"
 	
-	if [ -s "$OUT/$cal-$DATE.ics" ]; then
-		echo "$cal successfully downloaded"
+	if [ -s "$OUT/$name-$DATE.ics" ]; then
+		echo "$name successfully downloaded"
 	else
 		echo "unknwon error"
-		rm "$OUT/$cal-$DATE.ics"
+		rm "$OUT/$name-$DATE.ics"
 		exit $?
 	fi
 
-	tar r -C "$OUT" -f "$OUT/DAV-$DATE.tar.gz" "$cal-$DATE.ics"
-	rm "$OUT/$cal-$DATE.ics"
+	tar r -C "$OUT" -f "$OUT/DAV-$DATE.tar.gz" "$name-$DATE.ics"
+	rm "$OUT/$name-$DATE.ics"
 done
