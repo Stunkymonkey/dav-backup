@@ -6,7 +6,7 @@ if [[ ! -w ./ ]]; then
 fi
 
 # getting config
-source ./config
+source "${XDG_CONFIG_HOME:-$HOME/.config}/dav-backup/config"
 
 tar cfT DAV-$DATE.tar.gz /dev/null
 

@@ -4,6 +4,7 @@ is a simple script, that downloads all your calendars and contacts from owncloud
 you can configure your data in a config file for automation:
 ```
 #dav-backup
+#~/.config/dav-backup/config
 
 # the URL to your server
 HOST="https://cloud.example.com"
