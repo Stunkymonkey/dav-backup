@@ -9,6 +9,9 @@ you can configure your data in a config file for automation:
 # the URL to your server
 HOST="https://cloud.example.com"
 
+# output of the tarpackage
+OUT="~/.cache/backup"
+
 # enter the service that is providing the dav-service (eg. "owncloud"/"baikal")
 SERVICE="baikal"
 

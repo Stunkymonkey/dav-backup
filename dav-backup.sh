@@ -1,15 +1,16 @@
 #!/bin/bash
 
-if [[ ! -w ./ ]]; then
-	echo "Error: unable to write in directory"
-	exit 1
-fi
-
 # getting config
 source "${XDG_CONFIG_HOME:-$HOME/.config}/dav-backup/config"
 export WGETRC="${XDG_CONFIG_HOME:-$HOME/.config}/dav-backup/credentials"
 
-tar cfT DAV-$DATE.tar.gz /dev/null
+if [[ ! -w $OUT/ ]]; then
+	echo "Error: unable to write into directory '${OUT}'!"
+	exit 1
+fi
+
+# create empty tarpackage
+tar cfT "$OUT/DAV-$DATE.tar.gz" /dev/null
 
 case "$SERVICE" in
 	"owncloud" )
@@ -27,34 +28,34 @@ esac
 
 for addr in $ADDRESSBOOK; do
 	wget -q \
-		-O ${addr}-$DATE.vcf \
+		-O $OUT/${addr}-$DATE.vcf \
 		$HOST/$CARDURL/$DAVUSER/$addr?export
 	
-	if [ -s $addr-$DATE.vcf ]; then
+	if [ -s $OUT/$addr-$DATE.vcf ]; then
 		echo "$addr successfully downloaded"
 	else
 		echo "unknwon error"
-		rm $addr-$DATE.vcf
+		rm $OUT/$addr-$DATE.vcf
 		exit $?
 	fi
 
-	tar rvf DAV-$DATE.tar.gz $addr-$DATE.vcf
-	rm $addr-$DATE.vcf
+	tar r -C $OUT -f $OUT/DAV-$DATE.tar.gz $addr-$DATE.vcf
+	rm $OUT/$addr-$DATE.vcf
 done
 
 for cal in $CALENDAR; do
 	wget -q \
-		-O $cal-$DATE.ics \
+		-O $OUT/$cal-$DATE.ics \
 		$HOST/$CALURL/$DAVUSER/$cal?export
 	
-	if [ -s $cal-$DATE.ics ]; then
+	if [ -s $OUT/$cal-$DATE.ics ]; then
 		echo "$cal successfully downloaded"
 	else
 		echo "unknwon error"
-		rm $cal-$DATE.ics
+		rm $OUT/$cal-$DATE.ics
 		exit $?
 	fi
 
-	tar rvf DAV-$DATE.tar.gz $cal-$DATE.ics
-	rm $cal-$DATE.ics
+	tar r -C $OUT -f $OUT/DAV-$DATE.tar.gz $cal-$DATE.ics
+	rm $OUT/$cal-$DATE.ics
 done
