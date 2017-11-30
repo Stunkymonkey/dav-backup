@@ -31,7 +31,7 @@ fi
 
 
 for addr in $ADDRESSBOOK; do
-	wget --user="$DAVUSER" --password="$PASSWORD" --no-check-certificate --recursive -q -O ${addr}-$DATE.vcf $HOST/$CARDURL/$DAVUSER/$addr?export
+	wget --user="$DAVUSER" --password="$PASSWORD" -q -O ${addr}-$DATE.vcf $HOST/$CARDURL/$DAVUSER/$addr?export
 	
 	if [ -s $addr-$DATE.vcf ]; then
 		echo "$addr successfully downloaded"
@@ -46,7 +46,7 @@ for addr in $ADDRESSBOOK; do
 done
 
 for cal in $CALENDAR; do
-	wget --user="$DAVUSER" --password="$PASSWORD" --no-check-certificate --recursive -q -O $cal-$DATE.ics $HOST/$CALURL/$DAVUSER/$cal?export
+	wget --user="$DAVUSER" --password="$PASSWORD" -q -O $cal-$DATE.ics $HOST/$CALURL/$DAVUSER/$cal?export
 	
 	if [ -s $cal-$DATE.ics ]; then
 		echo "$cal successfully downloaded"
