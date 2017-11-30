@@ -32,8 +32,7 @@ CALENDAR="personal
 holiday"
 
 # date-format of output-file
-DATE=$(date +"%Y_%m_%d_%H_%M_%S")
-
+DATE=$(date +"%Y-%m-%d_%H-%M-%S")
 ```
 
 
