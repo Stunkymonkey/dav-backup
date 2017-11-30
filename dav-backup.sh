@@ -25,13 +25,16 @@ case "$SERVICE" in
 esac
 
 if [[ -z "$PASSWORD" ]]; then
-	echo -n "Enter host password for user '$DAVUSER':"
-	read -s PASSWORD
+	read -p "Enter host password for user '$DAVUSER':" -s PASSWORD
 fi
 
 
 for addr in $ADDRESSBOOK; do
-	wget --user="$DAVUSER" --password="$PASSWORD" -q -O ${addr}-$DATE.vcf $HOST/$CARDURL/$DAVUSER/$addr?export
+	wget -q \
+		--user="$DAVUSER" \
+		--password="$PASSWORD" \
+		-O ${addr}-$DATE.vcf \
+		$HOST/$CARDURL/$DAVUSER/$addr?export
 	
 	if [ -s $addr-$DATE.vcf ]; then
 		echo "$addr successfully downloaded"
@@ -46,7 +49,11 @@ for addr in $ADDRESSBOOK; do
 done
 
 for cal in $CALENDAR; do
-	wget --user="$DAVUSER" --password="$PASSWORD" -q -O $cal-$DATE.ics $HOST/$CALURL/$DAVUSER/$cal?export
+	wget -q \
+		--user="$DAVUSER" \
+		--password="$PASSWORD" \
+		-O $cal-$DATE.ics \
+		$HOST/$CALURL/$DAVUSER/$cal?export
 	
 	if [ -s $cal-$DATE.ics ]; then
 		echo "$cal successfully downloaded"
