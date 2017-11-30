@@ -1,7 +1,13 @@
-#dav-backup
-is a simple script, that downloads all your calendars and contacts from owncloud and stores them in a file
+# dav-backup
 
-you can configure your data in a config file for automation:
+A simple script, that downloads all your calendars and addressbooks from owncloud or baikal and stores them in a file.
+
+# configuration
+
+## main
+
+You can configure your data in a config file for automation:
+
 ```
 #dav-backup
 #~/.config/dav-backup/config
@@ -29,6 +35,9 @@ holiday"
 DATE=$(date +"%Y_%m_%d_%H_%M_%S")
 
 ```
+
+
+## credentials
 
 Also put your credentials into `~/.config/dav-backup/credentials`:
 
