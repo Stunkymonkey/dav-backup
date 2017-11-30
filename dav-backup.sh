@@ -26,7 +26,7 @@ case "$SERVICE" in
 		exit 1
 esac
 
-for addr in "$ADDRESSBOOK"; do
+for addr in "${ADDRESSBOOKS[@]}"; do
 	wget -q \
 		-O "$OUT/${addr}-$DATE.vcf" \
 		"$(printf "${CARDURL}" "${addr}")"
@@ -43,7 +43,7 @@ for addr in "$ADDRESSBOOK"; do
 	rm "$OUT/$addr-$DATE.vcf"
 done
 
-for cal in "$CALENDAR"; do
+for cal in "${CALENDARS[@]}"; do
 	wget -q \
 		-O "$OUT/$cal-$DATE.ics" \
 		"$(printf "${CALURL}" "${cal}")"
