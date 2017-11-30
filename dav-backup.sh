@@ -14,12 +14,12 @@ tar cfT "$OUT/DAV-$DATE.tar.gz" /dev/null
 
 case "$SERVICE" in
 	"owncloud" )
-		CARDURL="remote.php/carddav/addressbooks"
-		CALURL="remote.php/caldav/calendars"
+		CARDURL="$HOST/remote.php/carddav/addressbooks/$DAVUSER/%s?export"
+		CALURL="$HOST/remote.php/caldav/calendars/$DAVUSER/%s?export"
 		;;
 	"baikal" )
-		CARDURL="dav.php/addressbooks"
-		CALURL="dav.php/calendars"
+		CARDURL="$HOST/dav.php/addressbooks/$DAVUSER/%s?export"
+		CALURL="$HOST/dav.php/calendars/$DAVUSER/%s?export"
 		;;
 	*)
 		echo "Unknown Service"
@@ -29,7 +29,7 @@ esac
 for addr in $ADDRESSBOOK; do
 	wget -q \
 		-O $OUT/${addr}-$DATE.vcf \
-		$HOST/$CARDURL/$DAVUSER/$addr?export
+		"$(printf "${CARDURL}" "${addr}")"
 	
 	if [ -s $OUT/$addr-$DATE.vcf ]; then
 		echo "$addr successfully downloaded"
@@ -46,7 +46,7 @@ done
 for cal in $CALENDAR; do
 	wget -q \
 		-O $OUT/$cal-$DATE.ics \
-		$HOST/$CALURL/$DAVUSER/$cal?export
+		"$(printf "${CALURL}" "${cal}")"
 	
 	if [ -s $OUT/$cal-$DATE.ics ]; then
 		echo "$cal successfully downloaded"
