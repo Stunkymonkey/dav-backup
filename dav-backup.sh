@@ -30,34 +30,34 @@ if [[ -z "$PASSWORD" ]]; then
 fi
 
 
-for i in $ADDRESSBOOK; do
-	wget --user="$DAVUSER" --password="$PASSWORD" --no-check-certificate --recursive -q -O $i-$DATE.vcf $HOST/$CARDURL/$DAVUSER/$i?export
+for addr in $ADDRESSBOOK; do
+	wget --user="$DAVUSER" --password="$PASSWORD" --no-check-certificate --recursive -q -O ${addr}-$DATE.vcf $HOST/$CARDURL/$DAVUSER/$addr?export
 	
-	if [ -s $i-$DATE.vcf ]; then
-		echo "$i successfully downloaded"
+	if [ -s $addr-$DATE.vcf ]; then
+		echo "$addr successfully downloaded"
 	else
 		echo "unknwon error"
-		rm $i-$DATE.vcf
+		rm $addr-$DATE.vcf
 		exit $?
 	fi
 
-	tar rvf DAV-$DATE.tar.gz $i-$DATE.vcf
-	rm $i-$DATE.vcf
+	tar rvf DAV-$DATE.tar.gz $addr-$DATE.vcf
+	rm $addr-$DATE.vcf
 done
 
-for j in $CALENDAR; do
-	wget --user="$DAVUSER" --password="$PASSWORD" --no-check-certificate --recursive -q -O $j-$DATE.ics $HOST/$CALURL/$DAVUSER/$j?export
+for cal in $CALENDAR; do
+	wget --user="$DAVUSER" --password="$PASSWORD" --no-check-certificate --recursive -q -O $cal-$DATE.ics $HOST/$CALURL/$DAVUSER/$cal?export
 	
-	if [ -s $j-$DATE.ics ]; then
-		echo "$j successfully downloaded"
+	if [ -s $cal-$DATE.ics ]; then
+		echo "$cal successfully downloaded"
 	else
 		echo "unknwon error"
-		rm $j-$DATE.ics
+		rm $cal-$DATE.ics
 		exit $?
 	fi
 
-	tar rvf DAV-$DATE.tar.gz $j-$DATE.ics
-	rm $j-$DATE.ics
+	tar rvf DAV-$DATE.tar.gz $cal-$DATE.ics
+	rm $cal-$DATE.ics
 done
 
 unset PASSWORD
