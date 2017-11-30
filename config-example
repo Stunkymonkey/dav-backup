@@ -9,9 +9,6 @@ SERVICE="baikal"
 # enter your login-username
 DAVUSER="user"
 
-# leave it empty, then you will be promted every time you use the script
-PASSWORD="123456"
-
 # small letters (for owncloud/baikal)
 ADDRESSBOOK="contacts"
 

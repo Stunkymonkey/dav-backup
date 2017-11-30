@@ -7,6 +7,7 @@ fi
 
 # getting config
 source "${XDG_CONFIG_HOME:-$HOME/.config}/dav-backup/config"
+export WGETRC="${XDG_CONFIG_HOME:-$HOME/.config}/dav-backup/credentials"
 
 tar cfT DAV-$DATE.tar.gz /dev/null
 
@@ -24,15 +25,8 @@ case "$SERVICE" in
 		exit 1
 esac
 
-if [[ -z "$PASSWORD" ]]; then
-	read -p "Enter host password for user '$DAVUSER':" -s PASSWORD
-fi
-
-
 for addr in $ADDRESSBOOK; do
 	wget -q \
-		--user="$DAVUSER" \
-		--password="$PASSWORD" \
 		-O ${addr}-$DATE.vcf \
 		$HOST/$CARDURL/$DAVUSER/$addr?export
 	
@@ -50,8 +44,6 @@ done
 
 for cal in $CALENDAR; do
 	wget -q \
-		--user="$DAVUSER" \
-		--password="$PASSWORD" \
 		-O $cal-$DATE.ics \
 		$HOST/$CALURL/$DAVUSER/$cal?export
 	
@@ -66,5 +58,3 @@ for cal in $CALENDAR; do
 	tar rvf DAV-$DATE.tar.gz $cal-$DATE.ics
 	rm $cal-$DATE.ics
 done
-
-unset PASSWORD

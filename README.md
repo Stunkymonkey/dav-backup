@@ -15,9 +15,6 @@ SERVICE="baikal"
 # enter your login-username
 DAVUSER="user"
 
-# leave it empty, then you will be promted every time you use the script
-PASSWORD="123456"
-
 # small letters (for owncloud/baikal)
 ADDRESSBOOK="contacts"
 
@@ -27,5 +24,16 @@ holiday"
 
 # date-format of output-file
 DATE=$(date +"%Y_%m_%d_%H_%M_%S")
+
+```
+
+Also put your credentials into `~/.config/dav-backup/credentials`:
+
+```
+# put into
+#~/.config/dav-backup/credentials
+
+user=<Value of DAVUSER>
+password=<your password to authenticate>
 
 ```
