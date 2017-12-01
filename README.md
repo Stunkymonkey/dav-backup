@@ -18,16 +18,16 @@ HOST="https://cloud.example.com"
 # output of the tarpackage
 OUT="~/.cache/backup"
 
-# enter the service that is providing the dav-service (eg. "owncloud"/"baikal")
+# enter the service that is providing the dav-service (eg. "owncloud"/"baikal"/"radicale")
 SERVICE="baikal"
 
 # enter your login-username
 DAVUSER="user"
 
-# small letters (for owncloud/baikal)
+# small letters (for owncloud/baikal/radicale)
 ADDRESSBOOKS=("private" "work")
 
-# small letters (for owncloud/baikal)
+# small letters (for owncloud/baikal/radicale)
 CALENDARS=("personal" "holiday")
 
 # date-format of output-file

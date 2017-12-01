@@ -42,6 +42,10 @@ case "$SERVICE" in
 		CARDURL="$HOST/dav.php/addressbooks/$DAVUSER/%s?export"
 		CALURL="$HOST/dav.php/calendars/$DAVUSER/%s?export"
 		;;
+	"radicale" )
+		CARDURL="$HOST/$DAVUSER/%s"
+		CALURL="${CARDURL}"
+		;;
 	*)
 		die "Unknown Service"
 esac
