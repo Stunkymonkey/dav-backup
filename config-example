@@ -3,21 +3,17 @@
 # the URL to your server
 HOST="https://cloud.example.com"
 
-# enter the service that is providing the dav-service (eg. "owncloud"/"baikal")
+# enter the service that is providing the dav-service (eg. "owncloud"/"baikal"/"radicale")
 SERVICE="baikal"
 
 # enter your login-username
 DAVUSER="user"
 
-# leave it empty, then you will be promted every time you use the script
-PASSWORD="123456"
+# small letters (for owncloud/baikal/radicale)
+ADDRESSBOOKS=("private" "work")
 
-# small letters (for owncloud/baikal)
-ADDRESSBOOK="contacts"
-
-# small letters (for owncloud/baikal)
-CALENDAR="personal
-holiday"
+# small letters (for owncloud/baikal/radicale)
+CALENDARS=("personal" "holiday")
 
 # date-format of output-file
-DATE=$(date +"%Y_%m_%d_%H_%M_%S")
+DATE=$(date +"%Y-%m-%d_%H-%M-%S")

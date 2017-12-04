@@ -1,63 +1,67 @@
 #!/bin/bash
 
-if [[ ! -w ./ ]]; then
-	echo "Error: unable to write in directory"
-	exit 1
-fi
+die() { echo "$*" >&2; exit 1; }
+
+# download first argument and put with filename of argument two into archive
+download(){
+
+	url="${1?No URL given to download.}"
+	file="${2?No filename given to save.}"
+
+	wget -q \
+		-O "$OUT/${file}" \
+		"${url}"
+
+	if [ -s "$OUT/$file" ]; then
+		echo "SUCCESS: $file"
+	else
+		die "Unknown Error at '${file}'!"
+	fi
+
+	tar r -C "$OUT" -f "$OUT/DAV-$DATE.tar.gz" "${file}"
+	rm "$OUT/${file}"
+}
 
 # getting config
-source ./config
+source "${XDG_CONFIG_HOME:-$HOME/.config}/dav-backup/config"
+export WGETRC="${XDG_CONFIG_HOME:-$HOME/.config}/dav-backup/credentials"
 
-tar cfT DAV-$DATE.tar.gz /dev/null
+if [[ ! -w "$OUT/" ]]; then
+	die "Error: unable to write into directory '${OUT}'!"
+fi
+
+# create empty tarpackage
+tar cfT "$OUT/DAV-$DATE.tar.gz" /dev/null
 
 case "$SERVICE" in
 	"owncloud" )
-		CARDURL="remote.php/carddav/addressbooks"
-		CALURL="remote.php/caldav/calendars"
+		CARDURL="$HOST/remote.php/carddav/addressbooks/$DAVUSER/%s?export"
+		CALURL="$HOST/remote.php/caldav/calendars/$DAVUSER/%s?export"
 		;;
 	"baikal" )
-		CARDURL="dav.php/addressbooks"
-		CALURL="dav.php/calendars"
+		CARDURL="$HOST/dav.php/addressbooks/$DAVUSER/%s?export"
+		CALURL="$HOST/dav.php/calendars/$DAVUSER/%s?export"
+		;;
+	"radicale" )
+		CARDURL="$HOST/$DAVUSER/%s"
+		CALURL="${CARDURL}"
 		;;
 	*)
-		echo "Unknown Service"
-		exit 1
+		die "Unknown Service"
 esac
 
-if [[ -z "$PASSWORD" ]]; then
-	echo -n "Enter host password for user '$DAVUSER':"
-	read -s PASSWORD
-fi
+for addr in "${ADDRESSBOOKS[@]}"; do
 
+	IFS=: read id name <<< "${addr}"
+	[ -n "${name}" ] || name="${id}"
 
-for i in $ADDRESSBOOK; do
-	wget --user="$DAVUSER" --password="$PASSWORD" --no-check-certificate --recursive -q -O $i-$DATE.vcf $HOST/$CARDURL/$DAVUSER/$i?export
-	
-	if [ -s $i-$DATE.vcf ]; then
-		echo "$i successfully downloaded"
-	else
-		echo "unknwon error"
-		rm $i-$DATE.vcf
-		exit $?
-	fi
-
-	tar rvf DAV-$DATE.tar.gz $i-$DATE.vcf
-	rm $i-$DATE.vcf
+	download "$(printf "${CARDURL}" "${id}")" "${name}-$DATE.vcf"
 done
 
-for j in $CALENDAR; do
-	wget --user="$DAVUSER" --password="$PASSWORD" --no-check-certificate --recursive -q -O $j-$DATE.ics $HOST/$CALURL/$DAVUSER/$j?export
-	
-	if [ -s $j-$DATE.ics ]; then
-		echo "$j successfully downloaded"
-	else
-		echo "unknwon error"
-		rm $j-$DATE.ics
-		exit $?
-	fi
+for cal in "${CALENDARS[@]}"; do
 
-	tar rvf DAV-$DATE.tar.gz $j-$DATE.ics
-	rm $j-$DATE.ics
+	IFS=: read id name <<< "${cal}"
+	[ -n "${name}" ] || name="${id}"
+
+	download "$(printf "${CALURL}" "${id}")" "$name-$DATE.ics"
 done
-
-unset PASSWORD
