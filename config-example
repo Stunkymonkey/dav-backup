@@ -3,6 +3,9 @@
 # the URL to your server
 HOST="https://cloud.example.com"
 
+# output of the tarpackage
+OUT="/path/to/out"
+
 # enter the service that is providing the dav-service (eg. "owncloud"/"baikal"/"radicale")
 SERVICE="baikal"
 
